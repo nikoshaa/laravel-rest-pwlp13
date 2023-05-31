@@ -33,4 +33,21 @@ class ApiAuthController extends Controller
 
         return response()->noContent();
     }
+    public function register(RegisterRequest $request){
+        $user=User::create([
+            'username'=>$request->username,
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'password'=>Hash::make($request->password)
+        ]);
+
+        $token=$user->createToken('token')->plainTextToken;
+
+        return new LoginResource([
+            'message'=>'success login',
+            'user'=>$user,
+            'token'=>$token,
+        ],200);
+    }
+
 }
